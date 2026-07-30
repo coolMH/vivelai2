@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bulk Tools - Vivel AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- JSZip library for ZIP archive generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="bg-white text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+    
+    <div id="header-container"></div>
+
+    <main class="flex-grow">
+      <div class="max-w-6xl mx-auto space-y-8 px-4 py-6">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2">
+          <h1 class="text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
+            <i data-lucide="layers" class="w-8 h-8 text-blue-600"></i>
+            <span>Bulk Batch Tools</span>
+          </h1>
+          <p class="text-slate-600 text-sm max-w-lg mx-auto">
+            Process multiple images simultaneously. Resize, convert formats, enhance, and export a consolidated ZIP archive.
+          </p>
+        </div>
+
+        <!-- Main Workspace -->
+        <div class="space-y-6">
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-6">
+            
+            <!-- Mode Selection & Add Images Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+              <div class="flex items-center space-x-2">
+                <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider mr-2">Batch Task:</span>
+                <button
+                  id="mode-convert"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors bg-blue-600 text-white cursor-pointer"
+                >
+                  <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                  <span>Format Convert</span>
+                </button>
+
+                <button
+                  id="mode-resize"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 cursor-pointer"
+                >
+                  <i data-lucide="scaling" class="w-3.5 h-3.5"></i>
+                  <span>Batch Resize</span>
+                </button>
+
+                <button
+                  id="mode-enhance"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 cursor-pointer"
+                >
+                  <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+                  <span>Auto Enhance</span>
+                </button>
+              </div>
+
+              <div class="flex items-center space-x-3">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  class="hidden"
+                  id="bulk-file-input"
+                />
+                <label
+                  for="bulk-file-input"
+                  class="bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer flex items-center space-x-1.5 transition-colors border border-slate-200 shadow-xs"
+                >
+                  <i data-lucide="upload" class="w-4 h-4 text-blue-600"></i>
+                  <span>Add Images</span>
+                </label>
+
+                <button
+                  id="btn-clear-all"
+                  class="hidden text-slate-500 hover:text-rose-600 text-xs px-3 py-2 cursor-pointer"
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+
+            <!-- Mode Settings Bar -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-wrap items-center gap-6">
+              
+              <!-- Format Picker -->
+              <div class="flex items-center space-x-2">
+                <span class="text-xs text-slate-600 font-medium">Target Format:</span>
+                <select
+                  id="select-format"
+                  class="bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-xs text-slate-900 focus:outline-none cursor-pointer"
+                >
+                  <option value="image/webp">WEBP (Recommended)</option>
+                  <option value="image/png">PNG (Lossless)</option>
+                  <option value="image/jpeg">JPEG (Compressed)</option>
+                </select>
+              </div>
+
+              <!-- Resize Inputs -->
+              <div id="resize-inputs" class="hidden flex items-center space-x-2">
+                <span class="text-xs text-slate-600 font-medium">Max Dimensions:</span>
+                <input
+                  type="number"
+                  value="1080"
+                  id="input-max-width"
+                  class="w-20 bg-slate-50 border border-slate-200 rounded px-2 py-1 text-xs text-slate-900 font-mono"
+                />
+                <span class="text-xs text-slate-500">×</span>
+                <input
+                  type="number"
+                  value="1080"
+                  id="input-max-height"
+                  class="w-20 bg-slate-50 border border-slate-200 rounded px-2 py-1 text-xs text-slate-900 font-mono"
+                />
+                <span class="text-xs text-slate-500">px</span>
+              </div>
+
+              <!-- Quality Slider -->
+              <div class="flex items-center space-x-2">
+                <span class="text-xs text-slate-600 font-medium">Quality:</span>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="1.0"
+                  step="0.05"
+                  value="0.9"
+                  id="input-quality"
+                  class="w-24 accent-blue-600 cursor-pointer"
+                />
+                <span id="quality-val-display" class="text-xs text-slate-800 font-mono font-bold">90%</span>
+              </div>
+            </div>
+
+            <!-- Empty Drop Zone -->
+            <div id="empty-zone" class="border-2 border-dashed border-slate-300 rounded-2xl p-10 text-center space-y-3 bg-white">
+              <i data-lucide="layers" class="w-10 h-10 text-slate-400 mx-auto"></i>
+              <h4 class="text-slate-900 text-sm font-semibold">No images added yet</h4>
+              <p class="text-slate-500 text-xs">Click "Add Images" above to upload multiple files for batch processing.</p>
+            </div>
+
+            <!-- Queue & Processing Section -->
+            <div id="queue-section" class="hidden space-y-4">
+              <div class="flex items-center justify-between text-xs text-slate-600 font-medium">
+                <span id="queue-count-label">Queue (0 files)</span>
+                <span id="progress-text" class="hidden text-blue-600 font-bold">Processing: 0%</span>
+              </div>
+
+              <!-- Overall Progress Bar -->
+              <div id="progress-bar-wrap" class="hidden w-full bg-slate-200 h-2 rounded-full overflow-hidden border border-slate-300">
+                <div
+                  id="progress-bar-fill"
+                  class="bg-blue-600 h-full transition-all duration-300"
+                  style="width: 0%;"
+                ></div>
+              </div>
+
+              <!-- File List -->
+              <div id="queue-list" class="space-y-2 max-h-96 overflow-y-auto pr-1"></div>
+
+              <!-- Action Bar -->
+              <div class="pt-4 flex flex-wrap items-center justify-between gap-4 border-t border-slate-200">
+                <button
+                  id="btn-process-bulk"
+                  class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-xs flex items-center space-x-2 transition-all cursor-pointer"
+                >
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                  <span id="process-btn-text">Process All Images</span>
+                </button>
+
+                <div id="zip-download-container"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="js/imageProcessing.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        renderHeader('bulk-tools');
+        renderFooter();
+
+        let items = [];
+        let bulkMode = 'convert';
+        let targetFormat = 'image/webp';
+        let targetWidth = 1080;
+        let targetHeight = 1080;
+        let quality = 0.9;
+        let isProcessing = false;
+        let zipBlob = null;
+
+        const modeConvert = document.getElementById('mode-convert');
+        const modeResize = document.getElementById('mode-resize');
+        const modeEnhance = document.getElementById('mode-enhance');
+
+        const selectFormat = document.getElementById('select-format');
+        const resizeInputs = document.getElementById('resize-inputs');
+        const inputMaxWidth = document.getElementById('input-max-width');
+        const inputMaxHeight = document.getElementById('input-max-height');
+        const inputQuality = document.getElementById('input-quality');
+        const qualityValDisplay = document.getElementById('quality-val-display');
+
+        const bulkFileInput = document.getElementById('bulk-file-input');
+        const btnClearAll = document.getElementById('btn-clear-all');
+
+        const emptyZone = document.getElementById('empty-zone');
+        const queueSection = document.getElementById('queue-section');
+        const queueCountLabel = document.getElementById('queue-count-label');
+        const queueList = document.getElementById('queue-list');
+        const progressBarWrap = document.getElementById('progress-bar-wrap');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const progressText = document.getElementById('progress-text');
+
+        const btnProcessBulk = document.getElementById('btn-process-bulk');
+        const processBtnText = document.getElementById('process-btn-text');
+        const zipDownloadContainer = document.getElementById('zip-download-container');
+
+        // Mode Switching
+        function updateModeUI() {
+          modeConvert.className = `px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors cursor-pointer ${
+            bulkMode === 'convert' ? 'bg-blue-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+          }`;
+          modeResize.className = `px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors cursor-pointer ${
+            bulkMode === 'resize' ? 'bg-blue-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+          }`;
+          modeEnhance.className = `px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors cursor-pointer ${
+            bulkMode === 'enhance' ? 'bg-blue-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+          }`;
+
+          resizeInputs.classList.toggle('hidden', bulkMode !== 'resize');
+        }
+
+        modeConvert.addEventListener('click', () => { bulkMode = 'convert'; updateModeUI(); });
+        modeResize.addEventListener('click', () => { bulkMode = 'resize'; updateModeUI(); });
+        modeEnhance.addEventListener('click', () => { bulkMode = 'enhance'; updateModeUI(); });
+
+        selectFormat.addEventListener('change', (e) => { targetFormat = e.target.value; });
+        inputMaxWidth.addEventListener('input', (e) => { targetWidth = parseInt(e.target.value) || 1080; });
+        inputMaxHeight.addEventListener('input', (e) => { targetHeight = parseInt(e.target.value) || 1080; });
+        inputQuality.addEventListener('input', (e) => {
+          quality = parseFloat(e.target.value);
+          qualityValDisplay.textContent = Math.round(quality * 100) + '%';
+        });
+
+        // File upload
+        bulkFileInput.addEventListener('change', (e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            const files = Array.from(e.target.files);
+            const newItems = files.map((file, idx) => ({
+              id: `bulk-${Date.now()}-${idx}-${Math.random().toString(36).substr(2, 5)}`,
+              file,
+              originalUrl: URL.createObjectURL(file),
+              name: file.name,
+              size: file.size,
+              status: 'idle'
+            }));
+            items = [...items, ...newItems];
+            zipBlob = null;
+            renderQueue();
+          }
+        });
+
+        btnClearAll.addEventListener('click', () => {
+          items = [];
+          zipBlob = null;
+          renderQueue();
+        });
+
+        function formatBytes(b) {
+          if (b < 1024) return b + ' B';
+          if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+          return (b / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        function renderQueue() {
+          if (items.length === 0) {
+            emptyZone.classList.remove('hidden');
+            queueSection.classList.add('hidden');
+            btnClearAll.classList.add('hidden');
+            zipDownloadContainer.innerHTML = '';
+            return;
+          }
+
+          emptyZone.classList.add('hidden');
+          queueSection.classList.remove('hidden');
+          btnClearAll.classList.remove('hidden');
+
+          queueCountLabel.textContent = `Queue (${items.length} files)`;
+
+          queueList.innerHTML = items.map((item) => `
+            <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center justify-between gap-4 shadow-xs">
+              <div class="flex items-center space-x-3 overflow-hidden">
+                <img src="${item.originalUrl}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg bg-slate-100 border border-slate-200 shrink-0" />
+                <div class="min-w-0">
+                  <div class="text-slate-900 text-xs font-semibold truncate">${item.name}</div>
+                  <div class="text-[11px] text-slate-500 font-mono">${formatBytes(item.size)}</div>
+                </div>
+              </div>
+
+              <div class="flex items-center space-x-3">
+                <span class="text-xs">
+                  ${item.status === 'idle' ? '<span class="text-slate-500">Queued</span>' : ''}
+                  ${item.status === 'processing' ? '<span class="text-blue-600 font-medium animate-pulse">Processing...</span>' : ''}
+                  ${item.status === 'completed' ? '<span class="text-emerald-600 font-semibold flex items-center gap-1"><i data-lucide="check-circle-2" class="w-3.5 h-3.5 inline"></i> Ready</span>' : ''}
+                  ${item.status === 'error' ? '<span class="text-rose-600">Failed</span>' : ''}
+                </span>
+
+                <button data-remove-id="${item.id}" class="remove-item-btn text-slate-400 hover:text-rose-600 p-1 cursor-pointer">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+          `).join('');
+
+          queueList.querySelectorAll('.remove-item-btn').forEach((b) => {
+            b.addEventListener('click', () => {
+              const id = b.getAttribute('data-remove-id');
+              items = items.filter((it) => it.id !== id);
+              renderQueue();
+            });
+          });
+
+          if (window.lucide) {
+            lucide.createIcons();
+          }
+        }
+
+        btnProcessBulk.addEventListener('click', async () => {
+          if (items.length === 0 || isProcessing) return;
+          isProcessing = true;
+          btnProcessBulk.disabled = true;
+          processBtnText.textContent = 'Processing Batch...';
+          progressBarWrap.classList.remove('hidden');
+          progressText.classList.remove('hidden');
+          zipDownloadContainer.innerHTML = '';
+
+          const processedList = [];
+
+          for (let i = 0; i < items.length; i++) {
+            items[i].status = 'processing';
+            renderQueue();
+
+            try {
+              const img = await loadImage(items[i].originalUrl);
+              let outputUrl = items[i].originalUrl;
+
+              if (bulkMode === 'resize') {
+                const res = await processImageResize(img, {
+                  width: targetWidth,
+                  height: targetHeight,
+                  maintainAspectRatio: true,
+                  unit: 'px',
+                  percentage: 100,
+                  format: targetFormat,
+                  quality: quality,
+                  scaleMode: 'fit'
+                });
+                outputUrl = res.dataUrl;
+              } else if (bulkMode === 'convert') {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth || img.width;
+                canvas.height = img.naturalHeight || img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                outputUrl = canvas.toDataURL(targetFormat, quality);
+              } else if (bulkMode === 'enhance') {
+                outputUrl = await processImageEnhancement(img, {
+                  brightness: 10,
+                  contrast: 15,
+                  saturation: 25,
+                  sharpness: 50,
+                  temperature: 0,
+                  blur: 0
+                });
+              }
+
+              processedList.push({ name: items[i].name, dataUrl: outputUrl });
+              items[i].status = 'completed';
+              items[i].processedUrl = outputUrl;
+            } catch (err) {
+              console.error(err);
+              items[i].status = 'error';
+            }
+
+            const pct = Math.round(((i + 1) / items.length) * 80);
+            progressBarFill.style.width = pct + '%';
+            progressText.textContent = `Processing: ${pct}%`;
+            renderQueue();
+          }
+
+          // ZIP Archive Generation
+          try {
+            zipBlob = await generateZipArchive(processedList, (zipPct) => {
+              const totalPct = 80 + Math.round(zipPct * 0.2);
+              progressBarFill.style.width = totalPct + '%';
+              progressText.textContent = `Compressing ZIP: ${totalPct}%`;
+            });
+
+            const zipUrl = URL.createObjectURL(zipBlob);
+            zipDownloadContainer.innerHTML = `
+              <a
+                href="${zipUrl}"
+                download="vivel-ai-processed-batch.zip"
+                class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-md flex items-center space-x-2 transition-all cursor-pointer"
+              >
+                <i data-lucide="file-archive" class="w-4 h-4"></i>
+                <span>Download ZIP Archive</span>
+              </a>
+            `;
+            if (window.lucide) lucide.createIcons();
+          } catch (err) {
+            console.error('ZIP generation failed:', err);
+          } finally {
+            isProcessing = false;
+            btnProcessBulk.disabled = false;
+            processBtnText.textContent = 'Process All Images';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vivel AI - AI Image Editing Suite</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="bg-white text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+    
+    <!-- Top Header -->
+    <div id="header-container"></div>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+      <div class="space-y-20 py-8 px-4 max-w-7xl mx-auto">
+        
+        <!-- Hero Section -->
+        <section class="text-center space-y-8 pt-6 pb-4">
+          <div class="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold px-4 py-1.5 rounded-full shadow-xs">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-blue-600"></i>
+            <span>Next-Generation Image Editing Suite</span>
+          </div>
+
+          <div class="space-y-4 max-w-4xl mx-auto">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+              AI Image Editing <span class="text-blue-600">Made Simple</span>
+            </h1>
+            <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+              Effortlessly erase watermarks, isolate backgrounds, resize dimensions, and enhance image clarity in seconds with high-precision AI tools.
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <a
+              href="watermark-remover.html"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center space-x-2"
+            >
+              <span>Try Watermark Remover</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+
+            <a
+              href="#tools-grid"
+              class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm px-6 py-3.5 rounded-xl border border-slate-200 transition-all"
+            >
+              Explore All Tools
+            </a>
+          </div>
+
+          <!-- Quick Highlights -->
+          <div class="pt-6 flex flex-wrap justify-center items-center gap-6 text-xs font-medium text-slate-500">
+            <span class="flex items-center space-x-1.5">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-600"></i>
+              <span>High-Precision AI Models</span>
+            </span>
+            <span class="flex items-center space-x-1.5">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-600"></i>
+              <span>High-Res Export</span>
+            </span>
+            <span class="flex items-center space-x-1.5">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-blue-600"></i>
+              <span>Batch Processing Supported</span>
+            </span>
+          </div>
+        </section>
+
+        <!-- Tool Cards Grid -->
+        <section id="tools-grid" class="space-y-8 scroll-mt-24">
+          <div class="text-center space-y-2">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              Complete AI Editing Toolkit
+            </h2>
+            <p class="text-slate-600 text-sm max-w-lg mx-auto">
+              Everything you need to produce stunning visual content for websites, social media, and products.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Tool 1: Watermark Remover -->
+            <a
+              href="watermark-remover.html"
+              class="group bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:bg-white hover:border-blue-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-6"
+            >
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="w-12 h-12 rounded-xl bg-blue-100/80 border border-blue-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <i data-lucide="eraser" class="w-6 h-6 text-blue-600"></i>
+                  </div>
+                  <span class="text-[11px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200">
+                    Popular
+                  </span>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">
+                    Watermark Remover
+                  </h3>
+                  <p class="text-xs font-semibold text-blue-600 mb-2">
+                    Erase unwanted logos, dates, text, and overlays automatically.
+                  </p>
+                  <p class="text-xs text-slate-600 leading-relaxed">
+                    Select unwanted objects or text and let AI seamlessly reconstruct the background texture with pristine clarity.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-1.5 text-xs font-bold text-blue-600 group-hover:text-blue-700 pt-2 border-t border-slate-200/60">
+                <span>Open Tool</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </a>
+
+            <!-- Tool 2: Background Remover -->
+            <a
+              href="background-remover.html"
+              class="group bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:bg-white hover:border-blue-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-6"
+            >
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="w-12 h-12 rounded-xl bg-blue-100/80 border border-blue-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <i data-lucide="scissors" class="w-6 h-6 text-blue-600"></i>
+                  </div>
+                  <span class="text-[11px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200">
+                    Automated
+                  </span>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">
+                    Background Remover
+                  </h3>
+                  <p class="text-xs font-semibold text-blue-600 mb-2">
+                    Isolate subjects with precision edge detection.
+                  </p>
+                  <p class="text-xs text-slate-600 leading-relaxed">
+                    Instantly cut out portraits, products, and graphics. Export transparent PNGs or replace backgrounds with custom colors.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-1.5 text-xs font-bold text-blue-600 group-hover:text-blue-700 pt-2 border-t border-slate-200/60">
+                <span>Open Tool</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </a>
+
+            <!-- Tool 3: Image Resizer -->
+            <a
+              href="image-resizer.html"
+              class="group bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:bg-white hover:border-blue-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-6"
+            >
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="w-12 h-12 rounded-xl bg-blue-100/80 border border-blue-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <i data-lucide="scaling" class="w-6 h-6 text-blue-600"></i>
+                  </div>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">
+                    Image Resizer
+                  </h3>
+                  <p class="text-xs font-semibold text-blue-600 mb-2">
+                    Resize, crop, and reformat without quality loss.
+                  </p>
+                  <p class="text-xs text-slate-600 leading-relaxed">
+                    Convert image dimensions for social media formats (Instagram, YouTube, Twitter) while maintaining aspect ratio and sharpness.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-1.5 text-xs font-bold text-blue-600 group-hover:text-blue-700 pt-2 border-t border-slate-200/60">
+                <span>Open Tool</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </a>
+
+            <!-- Tool 4: Image Enhancer -->
+            <a
+              href="image-enhancer.html"
+              class="group bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:bg-white hover:border-blue-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-6"
+            >
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="w-12 h-12 rounded-xl bg-blue-100/80 border border-blue-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <i data-lucide="sliders-horizontal" class="w-6 h-6 text-blue-600"></i>
+                  </div>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">
+                    Image Enhancer
+                  </h3>
+                  <p class="text-xs font-semibold text-blue-600 mb-2">
+                    Sharpen details, restore contrast, and boost color vibrancy.
+                  </p>
+                  <p class="text-xs text-slate-600 leading-relaxed">
+                    Intelligent tone mapping and sharpness adjustments elevate flat photos into crisp, professional visual assets.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-1.5 text-xs font-bold text-blue-600 group-hover:text-blue-700 pt-2 border-t border-slate-200/60">
+                <span>Open Tool</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </a>
+
+            <!-- Tool 5: Bulk Batch Tools -->
+            <a
+              href="bulk-tools.html"
+              class="group bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:bg-white hover:border-blue-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-6"
+            >
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="w-12 h-12 rounded-xl bg-blue-100/80 border border-blue-200 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <i data-lucide="layers" class="w-6 h-6 text-blue-600"></i>
+                  </div>
+                  <span class="text-[11px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full border border-blue-200">
+                    High Speed
+                  </span>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1">
+                    Bulk Batch Tools
+                  </h3>
+                  <p class="text-xs font-semibold text-blue-600 mb-2">
+                    Process dozens of images simultaneously in seconds.
+                  </p>
+                  <p class="text-xs text-slate-600 leading-relaxed">
+                    Resize, convert formats, and optimize collections of images in a single workflow and download as a compressed ZIP file.
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-1.5 text-xs font-bold text-blue-600 group-hover:text-blue-700 pt-2 border-t border-slate-200/60">
+                <span>Open Tool</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </a>
+
+          </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="bg-slate-50 border border-slate-200 rounded-3xl p-8 sm:p-12 space-y-10">
+          <div class="text-center space-y-2">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              How Vivel AI Works
+            </h2>
+            <p class="text-slate-600 text-sm max-w-md mx-auto">
+              Transform your photos in three simple steps.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-xs relative">
+              <span class="text-3xl font-extrabold text-blue-600 font-mono">01</span>
+              <h3 class="text-base font-bold text-slate-900">Upload Your Image</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Drag & drop or select photos in high resolution (PNG, JPG, WebP).
+              </p>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-xs relative">
+              <span class="text-3xl font-extrabold text-blue-600 font-mono">02</span>
+              <h3 class="text-base font-bold text-slate-900">AI Automated Processing</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Our intelligent visual algorithms automatically remove backgrounds, erase watermarks, or enhance details.
+              </p>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-xs relative">
+              <span class="text-3xl font-extrabold text-blue-600 font-mono">03</span>
+              <h3 class="text-base font-bold text-slate-900">Download High-Res Result</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Preview before/after results instantly and export your high-resolution image or bulk ZIP archive.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Feature Grid -->
+        <section class="space-y-10">
+          <div class="text-center space-y-2">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              Built for Commercial Speed & Precision
+            </h2>
+            <p class="text-slate-600 text-sm max-w-lg mx-auto">
+              Designed to empower creators, marketers, e-commerce stores, and photographers.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-3 shadow-xs">
+              <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                <i data-lucide="eraser" class="w-5 h-5 text-blue-600"></i>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900">AI Watermark Eraser</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Intelligently reconstruct background patterns when removing text, logos, or timestamp overlays.
+              </p>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-3 shadow-xs">
+              <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                <i data-lucide="scissors" class="w-5 h-5 text-blue-600"></i>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900">Hair-Level Cutout Precision</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Automated subject segmentation detects subtle edges, hair strands, and complex object boundaries.
+              </p>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-3 shadow-xs">
+              <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                <i data-lucide="scaling" class="w-5 h-5 text-blue-600"></i>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900">Preset Dimension Scaling</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                One-click preset sizes for Instagram posts, YouTube thumbnails, passport photos, and custom HD resolutions.
+              </p>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-3 shadow-xs">
+              <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                <i data-lucide="sliders-horizontal" class="w-5 h-5 text-blue-600"></i>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900">Detail & Color Enhancement</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Boost clarity, reduce noise, and refine color balance with professional-grade enhancement filters.
+              </p>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-3 shadow-xs">
+              <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                <i data-lucide="layers" class="w-5 h-5 text-blue-600"></i>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900">High-Volume Batch Processing</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Save hours by converting, resizing, and enhancing entire folders of images in a unified batch pipeline.
+              </p>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-3 shadow-xs">
+              <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                <i data-lucide="shield-check" class="w-5 h-5 text-blue-600"></i>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900">Privacy & Security Guaranteed</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Your photos remain confidential and secure throughout every editing process.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ Accordion -->
+        <section id="faqs" class="max-w-4xl mx-auto space-y-8 scroll-mt-24">
+          <div class="text-center space-y-2">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              Frequently Asked Questions
+            </h2>
+            <p class="text-slate-600 text-sm">
+              Everything you need to know about Vivel AI.
+            </p>
+          </div>
+
+          <div class="space-y-4" id="faq-container">
+            <!-- FAQ items accordion via JS -->
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/components.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        renderHeader('home');
+        renderFooter();
+
+        // FAQ accordion logic
+        const faqs = [
+          {
+            q: 'What image formats are supported?',
+            a: 'Vivel AI supports all major image formats including PNG, JPEG, JPG, WebP, and SVG output options.'
+          },
+          {
+            q: 'Does Vivel AI compress or degrade my image quality?',
+            a: 'No. Vivel AI preserves maximum output quality. You can customize quality settings and resolution output up to 100% loss-free PNG or WebP files.'
+          },
+          {
+            q: 'How does Bulk Processing work?',
+            a: 'In the Bulk Tools section, you can select multiple images at once. Apply resize dimensions, format conversions, or color enhancements across all items simultaneously and download them packaged in a ZIP archive.'
+          },
+          {
+            q: 'Are my uploaded images kept secure and private?',
+            a: 'Yes, absolutely. We prioritize your confidentiality. Your images are handled securely and processed right in your browser.'
+          },
+          {
+            q: 'Can I use Vivel AI for commercial projects?',
+            a: 'Yes! All images processed through Vivel AI can be used freely for personal, commercial, marketing, and e-commerce applications.'
+          }
+        ];
+
+        const faqContainer = document.getElementById('faq-container');
+        let openIdx = 0;
+
+        function renderFaqs() {
+          faqContainer.innerHTML = faqs.map((faq, idx) => {
+            const isOpen = openIdx === idx;
+            return `
+              <div class="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden transition-all">
+                <button
+                  data-faq-idx="${idx}"
+                  class="faq-toggle w-full text-left p-5 font-semibold text-slate-900 text-sm flex items-center justify-between gap-4 focus:outline-none cursor-pointer"
+                >
+                  <span>${faq.q}</span>
+                  <i data-lucide="${isOpen ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4 ${isOpen ? 'text-blue-600' : 'text-slate-400'} shrink-0"></i>
+                </button>
+                ${
+                  isOpen
+                    ? `<div class="px-5 pb-5 pt-1 text-xs text-slate-600 leading-relaxed border-t border-slate-200/60">${faq.a}</div>`
+                    : ''
+                }
+              </div>
+            `;
+          }).join('');
+
+          faqContainer.querySelectorAll('.faq-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const idx = parseInt(btn.getAttribute('data-faq-idx'));
+              openIdx = openIdx === idx ? null : idx;
+              renderFaqs();
+            });
+          });
+
+          if (window.lucide) {
+            lucide.createIcons();
+          }
+        }
+
+        renderFaqs();
+      });
+    </script>
+  </body>
+</html>

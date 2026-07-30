@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Background Remover - Vivel AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="bg-white text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+    
+    <div id="header-container"></div>
+
+    <main class="flex-grow">
+      <div class="max-w-6xl mx-auto space-y-8 px-4 py-6">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2">
+          <h1 class="text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
+            <i data-lucide="scissors" class="w-8 h-8 text-blue-600"></i>
+            <span>Background Remover</span>
+          </h1>
+          <p class="text-slate-600 text-sm max-w-lg mx-auto">
+            Automatically detect subjects and isolate backgrounds with clean edge accuracy for portraits and product photos.
+          </p>
+        </div>
+
+        <!-- Initial Upload View -->
+        <div id="upload-view" class="space-y-6">
+          <div class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-3xl p-12 text-center bg-slate-50 transition-all">
+            <input
+              type="file"
+              accept="image/*"
+              class="hidden"
+              id="bg-upload"
+            />
+            <label for="bg-upload" class="cursor-pointer space-y-4 inline-block">
+              <div class="w-16 h-16 rounded-2xl bg-blue-100 border border-blue-200 text-blue-600 flex items-center justify-center mx-auto shadow-xs">
+                <i data-lucide="upload" class="w-8 h-8"></i>
+              </div>
+              <div>
+                <h3 class="text-slate-900 font-semibold text-base mb-1">
+                  Upload Image to Remove Background
+                </h3>
+                <p class="text-slate-500 text-xs">Portraits, Products, Objects (PNG, JPG, WebP)</p>
+              </div>
+              <span class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-xs">
+                Browse Image
+              </span>
+            </label>
+          </div>
+
+          <div id="sample-picker-container"></div>
+        </div>
+
+        <!-- Workspace View (hidden initially) -->
+        <div id="workspace-view" class="hidden space-y-6">
+          
+          <!-- Control Bar -->
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3 text-xs text-slate-600">
+              <span id="img-name-display" class="font-semibold text-slate-900">portrait-sample.png</span>
+              <button
+                id="btn-change-image"
+                class="text-blue-600 hover:underline text-xs cursor-pointer"
+              >
+                Change Image
+              </button>
+            </div>
+
+            <button
+              id="btn-remove-bg"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-6 py-2.5 rounded-xl shadow-xs flex items-center space-x-2 transition-all cursor-pointer"
+            >
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span id="remove-btn-text">Remove Background Now</span>
+            </button>
+          </div>
+
+          <!-- Initial Preview before processing -->
+          <div id="initial-preview" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center">
+            <h4 class="text-xs text-slate-500 uppercase tracking-wider mb-4 font-semibold">Ready to Remove Background</h4>
+            <div class="max-h-[450px] overflow-hidden flex justify-center items-center">
+              <img id="input-preview-img" src="" alt="Input" class="max-h-[400px] object-contain rounded-xl border border-slate-200" />
+            </div>
+          </div>
+
+          <!-- Loading Spinner -->
+          <div id="loading-spinner" class="hidden bg-slate-50 border border-slate-200 rounded-2xl p-12 text-center space-y-4">
+            <div class="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <h3 class="text-slate-900 font-semibold text-base">Segmenting Subject & Background...</h3>
+            <p class="text-xs text-slate-500">Isolating foreground details. Please wait a moment.</p>
+          </div>
+
+          <!-- Output Controls & Result -->
+          <div id="result-view" class="hidden space-y-6">
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3">
+              <div class="flex items-center space-x-2 text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                <i data-lucide="palette" class="w-4 h-4 text-blue-600"></i>
+                <span>Output Background Replacement:</span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-3">
+                <button
+                  id="btn-type-transparent"
+                  class="bg-blue-600 border-blue-600 text-white font-bold px-3.5 py-1.5 rounded-lg text-xs transition-colors border cursor-pointer"
+                >
+                  Transparent PNG
+                </button>
+
+                <button
+                  id="btn-type-color"
+                  class="bg-white border-slate-200 text-slate-700 hover:bg-slate-100 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors border cursor-pointer"
+                >
+                  Solid Color
+                </button>
+
+                <button
+                  id="btn-type-blur"
+                  class="bg-white border-slate-200 text-slate-700 hover:bg-slate-100 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-colors border cursor-pointer"
+                >
+                  Blur Background
+                </button>
+
+                <!-- Color Options -->
+                <div id="color-palette" class="hidden flex items-center space-x-2 pl-2 border-l border-slate-200">
+                  <button data-color="#ffffff" class="w-6 h-6 rounded-full border border-slate-300 bg-white cursor-pointer"></button>
+                  <button data-color="#000000" class="w-6 h-6 rounded-full border border-slate-300 bg-black cursor-pointer"></button>
+                  <button data-color="#2563eb" class="w-6 h-6 rounded-full border border-slate-300 bg-blue-600 cursor-pointer"></button>
+                  <button data-color="#7c3aed" class="w-6 h-6 rounded-full border border-slate-300 bg-purple-600 cursor-pointer"></button>
+                  <button data-color="#dc2626" class="w-6 h-6 rounded-full border border-slate-300 bg-red-600 cursor-pointer"></button>
+                  <button data-color="#16a34a" class="w-6 h-6 rounded-full border border-slate-300 bg-green-600 cursor-pointer"></button>
+                  <input type="color" id="custom-color-picker" value="#2563eb" class="w-7 h-7 bg-transparent cursor-pointer" />
+                </div>
+
+                <!-- Blur Option -->
+                <div id="blur-options" class="hidden flex items-center space-x-2 pl-2 border-l border-slate-200">
+                  <span class="text-xs text-slate-600">Blur:</span>
+                  <input type="range" min="2" max="30" value="10" id="blur-slider" class="w-24 accent-blue-600 cursor-pointer" />
+                  <span id="blur-val-display" class="text-xs text-slate-800 font-mono">10px</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comparison Slider -->
+            <div id="result-slider-container"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="js/imageProcessing.js"></script>
+    <script src="js/sampleImages.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        renderHeader('background-remover');
+        renderFooter();
+
+        let imageSrc = null;
+        let imageName = 'portrait-sample.png';
+        let transparentResultUrl = null;
+        let bgType = 'transparent';
+        let bgCustomColor = '#2563eb';
+        let bgBlurAmount = 10;
+
+        const uploadView = document.getElementById('upload-view');
+        const workspaceView = document.getElementById('workspace-view');
+        const imgNameDisplay = document.getElementById('img-name-display');
+        const inputPreviewImg = document.getElementById('input-preview-img');
+        const initialPreview = document.getElementById('initial-preview');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const resultView = document.getElementById('result-view');
+
+        const btnRemoveBg = document.getElementById('btn-remove-bg');
+        const removeBtnText = document.getElementById('remove-btn-text');
+        const btnChangeImage = document.getElementById('btn-change-image');
+
+        const btnTypeTransparent = document.getElementById('btn-type-transparent');
+        const btnTypeColor = document.getElementById('btn-type-color');
+        const btnTypeBlur = document.getElementById('btn-type-blur');
+
+        const colorPalette = document.getElementById('color-palette');
+        const blurOptions = document.getElementById('blur-options');
+        const customColorPicker = document.getElementById('custom-color-picker');
+        const blurSlider = document.getElementById('blur-slider');
+        const blurValDisplay = document.getElementById('blur-val-display');
+
+        initSamplePicker('sample-picker-container', 'portrait', (url, name) => {
+          imageName = name;
+          setImage(url);
+        });
+
+        document.getElementById('bg-upload').addEventListener('change', (e) => {
+          if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            imageName = file.name;
+            setImage(URL.createObjectURL(file));
+          }
+        });
+
+        function setImage(srcUrl) {
+          imageSrc = srcUrl;
+          transparentResultUrl = null;
+          imgNameDisplay.textContent = imageName;
+          inputPreviewImg.src = srcUrl;
+
+          uploadView.classList.add('hidden');
+          workspaceView.classList.remove('hidden');
+          initialPreview.classList.remove('hidden');
+          resultView.classList.add('hidden');
+          loadingSpinner.classList.add('hidden');
+        }
+
+        btnChangeImage.addEventListener('click', () => {
+          imageSrc = null;
+          workspaceView.classList.add('hidden');
+          uploadView.classList.remove('hidden');
+        });
+
+        btnRemoveBg.addEventListener('click', async () => {
+          if (!imageSrc) return;
+          btnRemoveBg.disabled = true;
+          removeBtnText.textContent = 'Removing Background...';
+          initialPreview.classList.add('hidden');
+          loadingSpinner.classList.remove('hidden');
+
+          try {
+            transparentResultUrl = await processBackgroundRemoval(imageSrc);
+            loadingSpinner.classList.add('hidden');
+            resultView.classList.remove('hidden');
+            applyCustomization();
+          } catch (err) {
+            console.error(err);
+          } finally {
+            btnRemoveBg.disabled = false;
+            removeBtnText.textContent = 'Remove Background Now';
+          }
+        });
+
+        async function applyCustomization() {
+          if (!imageSrc || !transparentResultUrl) return;
+
+          let finalUrl = transparentResultUrl;
+
+          if (bgType !== 'transparent') {
+            const cutoutImg = await loadImage(transparentResultUrl);
+            const w = cutoutImg.naturalWidth || cutoutImg.width;
+            const h = cutoutImg.naturalHeight || cutoutImg.height;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+
+            if (bgType === 'color') {
+              ctx.fillStyle = bgCustomColor;
+              ctx.fillRect(0, 0, w, h);
+            } else if (bgType === 'blur') {
+              const origImg = await loadImage(imageSrc);
+              ctx.filter = `blur(${bgBlurAmount}px)`;
+              ctx.drawImage(origImg, 0, 0, w, h);
+              ctx.filter = 'none';
+            }
+
+            ctx.drawImage(cutoutImg, 0, 0, w, h);
+            finalUrl = canvas.toDataURL('image/png');
+          }
+
+          initBeforeAfterSlider('result-slider-container', {
+            originalUrl: imageSrc,
+            processedUrl: finalUrl,
+            downloadFilename: 'no-bg-' + imageName,
+            title: 'Background Removal Result'
+          });
+        }
+
+        function updateTypeButtons() {
+          btnTypeTransparent.className = `px-3.5 py-1.5 rounded-lg text-xs transition-colors border cursor-pointer ${
+            bgType === 'transparent' ? 'bg-blue-600 border-blue-600 text-white font-bold' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
+          }`;
+          btnTypeColor.className = `px-3.5 py-1.5 rounded-lg text-xs transition-colors border cursor-pointer ${
+            bgType === 'color' ? 'bg-blue-600 border-blue-600 text-white font-bold' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
+          }`;
+          btnTypeBlur.className = `px-3.5 py-1.5 rounded-lg text-xs transition-colors border cursor-pointer ${
+            bgType === 'blur' ? 'bg-blue-600 border-blue-600 text-white font-bold' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
+          }`;
+
+          colorPalette.classList.toggle('hidden', bgType !== 'color');
+          blurOptions.classList.toggle('hidden', bgType !== 'blur');
+        }
+
+        btnTypeTransparent.addEventListener('click', () => {
+          bgType = 'transparent';
+          updateTypeButtons();
+          applyCustomization();
+        });
+
+        btnTypeColor.addEventListener('click', () => {
+          bgType = 'color';
+          updateTypeButtons();
+          applyCustomization();
+        });
+
+        btnTypeBlur.addEventListener('click', () => {
+          bgType = 'blur';
+          updateTypeButtons();
+          applyCustomization();
+        });
+
+        colorPalette.querySelectorAll('button[data-color]').forEach(b => {
+          b.addEventListener('click', () => {
+            bgCustomColor = b.getAttribute('data-color');
+            customColorPicker.value = bgCustomColor;
+            applyCustomization();
+          });
+        });
+
+        customColorPicker.addEventListener('input', (e) => {
+          bgCustomColor = e.target.value;
+          applyCustomization();
+        });
+
+        blurSlider.addEventListener('input', (e) => {
+          bgBlurAmount = Number(e.target.value);
+          blurValDisplay.textContent = bgBlurAmount + 'px';
+          applyCustomization();
+        });
+      });
+    </script>
+  </body>
+</html>

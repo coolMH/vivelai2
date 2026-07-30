@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Watermark Remover - Vivel AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="bg-white text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+    
+    <div id="header-container"></div>
+
+    <main class="flex-grow">
+      <div class="max-w-6xl mx-auto space-y-8 px-4 py-6">
+        
+        <!-- Title -->
+        <div class="text-center space-y-2">
+          <h1 class="text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
+            <i data-lucide="eraser" class="w-8 h-8 text-blue-600"></i>
+            <span>Watermark Remover</span>
+          </h1>
+          <p class="text-slate-600 text-sm max-w-lg mx-auto">
+            Highlight unwanted text, logos, or timestamps on your image and erase them cleanly.
+          </p>
+        </div>
+
+        <!-- Initial Upload View -->
+        <div id="upload-view" class="space-y-6">
+          <div class="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-3xl p-12 text-center bg-slate-50 transition-all">
+            <input
+              type="file"
+              accept="image/*"
+              class="hidden"
+              id="watermark-upload"
+            />
+            <label for="watermark-upload" class="cursor-pointer space-y-4 inline-block">
+              <div class="w-16 h-16 rounded-2xl bg-blue-100 border border-blue-200 text-blue-600 flex items-center justify-center mx-auto shadow-xs">
+                <i data-lucide="upload" class="w-8 h-8"></i>
+              </div>
+              <div>
+                <h3 class="text-slate-900 font-semibold text-base mb-1">
+                  Upload Image with Watermark
+                </h3>
+                <p class="text-slate-500 text-xs">Supports PNG, JPG, WebP formats</p>
+              </div>
+              <span class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors shadow-xs">
+                Select Image
+              </span>
+            </label>
+          </div>
+
+          <div id="sample-picker-container"></div>
+        </div>
+
+        <!-- Editor View (hidden initially) -->
+        <div id="editor-view" class="hidden space-y-6">
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6 space-y-4">
+            
+            <!-- Toolbar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-2">Selection Tool:</span>
+                
+                <button
+                  id="btn-tool-brush"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all bg-blue-600 text-white shadow-xs cursor-pointer"
+                >
+                  <i data-lucide="paintbrush" class="w-3.5 h-3.5"></i>
+                  <span>Highlight Area</span>
+                </button>
+
+                <button
+                  id="btn-tool-eraser"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 cursor-pointer"
+                >
+                  <i data-lucide="eraser" class="w-3.5 h-3.5"></i>
+                  <span>Erase Mask</span>
+                </button>
+
+                <button
+                  id="btn-clear-mask"
+                  class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-100 hover:text-rose-600 flex items-center space-x-1 transition-all cursor-pointer"
+                >
+                  <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                  <span>Clear All</span>
+                </button>
+              </div>
+
+              <!-- Brush Size Slider -->
+              <div class="flex items-center space-x-3 bg-white px-3 py-1.5 rounded-xl border border-slate-200">
+                <span class="text-xs text-slate-600 font-medium">Brush Size:</span>
+                <input
+                  type="range"
+                  min="5"
+                  max="100"
+                  value="30"
+                  id="brush-size-input"
+                  class="w-24 accent-blue-600 cursor-pointer"
+                />
+                <span id="brush-size-val" class="text-xs text-slate-900 font-mono font-bold w-6">30px</span>
+              </div>
+
+              <!-- Actions -->
+              <div class="flex items-center space-x-2">
+                <button
+                  id="btn-change-image"
+                  class="text-xs text-slate-600 hover:text-slate-900 px-3 py-1.5 cursor-pointer"
+                >
+                  Change Image
+                </button>
+                <button
+                  id="btn-process-watermark"
+                  class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-5 py-2 rounded-xl shadow-xs flex items-center space-x-2 transition-all cursor-pointer"
+                >
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                  <span id="process-btn-text">Erase Watermark Now</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Instruction Banner -->
+            <div class="bg-blue-50/80 border border-blue-200 rounded-xl p-3 text-xs text-blue-800 flex items-center justify-between">
+              <span class="flex items-center space-x-2 font-medium">
+                <i data-lucide="paintbrush" class="w-4 h-4 text-blue-600"></i>
+                <span>Paint over the watermark or logo with your mouse or touch screen, then click <strong>Erase Watermark Now</strong>.</span>
+              </span>
+            </div>
+
+            <!-- Canvas Workspace -->
+            <div
+              class="relative overflow-hidden rounded-xl border border-slate-300 bg-checkerboard flex items-center justify-center max-h-[550px]"
+            >
+              <canvas
+                id="image-canvas"
+                class="max-w-full max-h-[500px] object-contain block"
+              ></canvas>
+              <canvas
+                id="mask-canvas"
+                class="absolute top-0 left-0 w-full h-full object-contain cursor-crosshair touch-none"
+              ></canvas>
+            </div>
+          </div>
+
+          <!-- Comparison Result -->
+          <div id="result-container"></div>
+        </div>
+
+      </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="js/imageProcessing.js"></script>
+    <script src="js/sampleImages.js"></script>
+    <script src="js/components.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        renderHeader('watermark-remover');
+        renderFooter();
+
+        let imageSrc = null;
+        let imageName = 'watermark-sample.png';
+        let toolMode = 'brush';
+        let brushSize = 30;
+        let isDrawing = false;
+
+        const uploadView = document.getElementById('upload-view');
+        const editorView = document.getElementById('editor-view');
+
+        const imageCanvas = document.getElementById('image-canvas');
+        const maskCanvas = document.getElementById('mask-canvas');
+
+        const btnToolBrush = document.getElementById('btn-tool-brush');
+        const btnToolEraser = document.getElementById('btn-tool-eraser');
+        const btnClearMask = document.getElementById('btn-clear-mask');
+        const brushSizeInput = document.getElementById('brush-size-input');
+        const brushSizeVal = document.getElementById('brush-size-val');
+        const btnChangeImage = document.getElementById('btn-change-image');
+        const btnProcessWatermark = document.getElementById('btn-process-watermark');
+        const processBtnText = document.getElementById('process-btn-text');
+        const resultContainer = document.getElementById('result-container');
+
+        // Render Sample Picker
+        initSamplePicker('sample-picker-container', 'watermark', (url, name) => {
+          imageName = name;
+          setupCanvas(url);
+        });
+
+        // Upload Input
+        document.getElementById('watermark-upload').addEventListener('change', (e) => {
+          if (e.target.files && e.target.files[0]) {
+            const file = e.target.files[0];
+            imageName = file.name;
+            setupCanvas(URL.createObjectURL(file));
+          }
+        });
+
+        async function setupCanvas(srcUrl) {
+          imageSrc = srcUrl;
+          uploadView.classList.add('hidden');
+          editorView.classList.remove('hidden');
+          resultContainer.innerHTML = '';
+
+          const img = await loadImage(srcUrl);
+          const w = img.naturalWidth || img.width;
+          const h = img.naturalHeight || img.height;
+
+          imageCanvas.width = w;
+          imageCanvas.height = h;
+          const ctx = imageCanvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+
+          maskCanvas.width = w;
+          maskCanvas.height = h;
+          const maskCtx = maskCanvas.getContext('2d');
+          maskCtx.clearRect(0, 0, w, h);
+        }
+
+        // Tool Mode buttons
+        btnToolBrush.addEventListener('click', () => {
+          toolMode = 'brush';
+          btnToolBrush.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all bg-blue-600 text-white shadow-xs cursor-pointer';
+          btnToolEraser.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 cursor-pointer';
+        });
+
+        btnToolEraser.addEventListener('click', () => {
+          toolMode = 'eraser';
+          btnToolEraser.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all bg-blue-600 text-white shadow-xs cursor-pointer';
+          btnToolBrush.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 cursor-pointer';
+        });
+
+        btnClearMask.addEventListener('click', () => {
+          const maskCtx = maskCanvas.getContext('2d');
+          maskCtx.clearRect(0, 0, maskCanvas.width, maskCanvas.height);
+        });
+
+        brushSizeInput.addEventListener('input', (e) => {
+          brushSize = Number(e.target.value);
+          brushSizeVal.textContent = brushSize + 'px';
+        });
+
+        btnChangeImage.addEventListener('click', () => {
+          imageSrc = null;
+          editorView.classList.add('hidden');
+          uploadView.classList.remove('hidden');
+        });
+
+        // Drawing Handlers
+        function getCoords(e) {
+          const rect = maskCanvas.getBoundingClientRect();
+          const scaleX = maskCanvas.width / rect.width;
+          const scaleY = maskCanvas.height / rect.height;
+
+          let clientX = e.clientX;
+          let clientY = e.clientY;
+
+          if (e.touches && e.touches.length > 0) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+          }
+
+          return {
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY
+          };
+        }
+
+        function startDrawing(e) {
+          isDrawing = true;
+          draw(e);
+        }
+
+        function stopDrawing() {
+          isDrawing = false;
+          const ctx = maskCanvas.getContext('2d');
+          ctx.beginPath();
+        }
+
+        function draw(e) {
+          if (!isDrawing) return;
+          const ctx = maskCanvas.getContext('2d');
+          const { x, y } = getCoords(e);
+
+          ctx.lineWidth = brushSize;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+
+          if (toolMode === 'brush') {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.65)';
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+          } else {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+          }
+        }
+
+        maskCanvas.addEventListener('mousedown', startDrawing);
+        maskCanvas.addEventListener('mouseup', stopDrawing);
+        maskCanvas.addEventListener('mouseleave', stopDrawing);
+        maskCanvas.addEventListener('mousemove', draw);
+
+        maskCanvas.addEventListener('touchstart', startDrawing);
+        maskCanvas.addEventListener('touchend', stopDrawing);
+        maskCanvas.addEventListener('touchmove', draw);
+
+        // Process Watermark Removal
+        btnProcessWatermark.addEventListener('click', async () => {
+          btnProcessWatermark.disabled = true;
+          processBtnText.textContent = 'Removing Watermark...';
+
+          try {
+            const resultUrl = await processWatermarkRemoval(imageCanvas, maskCanvas);
+            initBeforeAfterSlider('result-container', {
+              originalUrl: imageSrc,
+              processedUrl: resultUrl,
+              downloadFilename: 'clean-' + imageName,
+              title: 'Watermark Removal Comparison'
+            });
+          } catch (err) {
+            console.error(err);
+          } finally {
+            btnProcessWatermark.disabled = false;
+            processBtnText.textContent = 'Erase Watermark Now';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

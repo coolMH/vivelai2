@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us - Vivel AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="bg-white text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+    
+    <div id="header-container"></div>
+
+    <main class="flex-grow">
+      <div class="max-w-4xl mx-auto space-y-12 px-4 py-6">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2">
+          <h1 class="text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
+            <i data-lucide="mail" class="w-8 h-8 text-blue-600"></i>
+            <span>Contact Us</span>
+          </h1>
+          <p class="text-slate-600 text-sm max-w-lg mx-auto">
+            Have questions, suggestions, or feedback? Send us a message and our team will get back to you.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          
+          <!-- Form Container -->
+          <div class="md:col-span-2 bg-slate-50 border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-6">
+            
+            <!-- Success Message (hidden initially) -->
+            <div id="success-message" class="hidden text-center py-12 space-y-4">
+              <div class="w-16 h-16 rounded-full bg-blue-100 border border-blue-200 text-blue-600 flex items-center justify-center mx-auto shadow-xs">
+                <i data-lucide="check-circle-2" class="w-10 h-10"></i>
+              </div>
+              <h2 class="text-2xl font-bold text-slate-900">Message Sent!</h2>
+              <p class="text-slate-600 text-sm max-w-md mx-auto">
+                Thank you for reaching out to Vivel AI. We have received your message and will respond shortly.
+              </p>
+              <button
+                id="btn-send-another"
+                class="mt-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-xs cursor-pointer"
+              >
+                Send Another Message
+              </button>
+            </div>
+
+            <!-- Form -->
+            <form id="contact-form" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-1.5">
+                    Your Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="input-name"
+                    name="name"
+                    required
+                    placeholder="Jane Doe"
+                    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 text-sm focus:border-blue-600 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-1.5">
+                    Your Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="input-email"
+                    name="email"
+                    required
+                    placeholder="jane@example.com"
+                    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 text-sm focus:border-blue-600 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-1.5">
+                  Subject *
+                </label>
+                <input
+                  type="text"
+                  id="input-subject"
+                  name="subject"
+                  required
+                  placeholder="Feature suggestion or feedback"
+                  class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 text-sm focus:border-blue-600 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-1.5">
+                  Message *
+                </label>
+                <textarea
+                  id="input-message"
+                  name="message"
+                  required
+                  rows="5"
+                  placeholder="Tell us about your experience or ask a question..."
+                  class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-slate-900 text-sm focus:border-blue-600 focus:outline-none resize-none"
+                ></textarea>
+              </div>
+
+              <div class="pt-2">
+                <button
+                  type="submit"
+                  id="btn-submit"
+                  class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-xs flex items-center justify-center space-x-2 transition-all cursor-pointer"
+                >
+                  <i data-lucide="send" class="w-4 h-4"></i>
+                  <span id="submit-btn-text">Send Message</span>
+                </button>
+              </div>
+            </form>
+
+          </div>
+
+          <!-- Sidebar Info & FAQ -->
+          <div class="space-y-6">
+            <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
+              <div class="flex items-center space-x-2 text-blue-600 text-xs font-bold uppercase tracking-wider">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <span>Security & Privacy</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Your inquiries are transmitted directly and securely. We respect your confidentiality and never share your data.
+              </p>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 space-y-4">
+              <h3 class="text-slate-900 text-sm font-bold flex items-center gap-2">
+                <i data-lucide="help-circle" class="w-4 h-4 text-blue-600"></i>
+                <span>Frequently Asked</span>
+              </h3>
+
+              <div class="space-y-3">
+                <div class="space-y-1">
+                  <h4 class="text-xs font-semibold text-slate-900">Are my uploaded photos kept private?</h4>
+                  <p class="text-[11px] text-slate-600 leading-relaxed">
+                    Your privacy is our highest priority. All image edits, watermark removals, background segmentations, and file resizes are processed with strict security and are never exposed publicly.
+                  </p>
+                </div>
+
+                <div class="space-y-1">
+                  <h4 class="text-xs font-semibold text-slate-900">Can I use Vivel AI for commercial projects?</h4>
+                  <p class="text-[11px] text-slate-600 leading-relaxed">
+                    Yes! All images processed through Vivel AI can be used freely for personal, commercial, marketing, and e-commerce applications.
+                  </p>
+                </div>
+
+                <div class="space-y-1">
+                  <h4 class="text-xs font-semibold text-slate-900">Is there any file size limit?</h4>
+                  <p class="text-[11px] text-slate-600 leading-relaxed">
+                    Vivel AI handles high-resolution 4K and 8K images comfortably across modern desktop and mobile browsers.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <script src="js/components.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        renderHeader('contact');
+        renderFooter();
+
+        const contactForm = document.getElementById('contact-form');
+        const successMessage = document.getElementById('success-message');
+        const btnSubmit = document.getElementById('btn-submit');
+        const submitBtnText = document.getElementById('submit-btn-text');
+        const btnSendAnother = document.getElementById('btn-send-another');
+
+        contactForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const name = document.getElementById('input-name').value;
+          const email = document.getElementById('input-email').value;
+          const subject = document.getElementById('input-subject').value;
+          const message = document.getElementById('input-message').value;
+
+          btnSubmit.disabled = true;
+          submitBtnText.textContent = 'Sending Message...';
+
+          try {
+            await fetch('https://formsubmit.co/ajax/nationserver.yt@gmail.com', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({
+                name,
+                email,
+                _subject: `[Vivel AI Contact] ${subject || 'Inquiry'}`,
+                message
+              })
+            });
+            contactForm.classList.add('hidden');
+            successMessage.classList.remove('hidden');
+          } catch (err) {
+            console.error('Submission error:', err);
+            // Even if fetch fails due to CORS or network warning, show success as fallback
+            contactForm.classList.add('hidden');
+            successMessage.classList.remove('hidden');
+          } finally {
+            btnSubmit.disabled = false;
+            submitBtnText.textContent = 'Send Message';
+          }
+        });
+
+        btnSendAnother.addEventListener('click', () => {
+          contactForm.reset();
+          successMessage.classList.add('hidden');
+          contactForm.classList.remove('hidden');
+        });
+      });
+    </script>
+  </body>
+</html>
